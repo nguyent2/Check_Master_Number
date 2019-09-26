@@ -1,0 +1,157 @@
+######################################################################
+# Author: Thy H. Nguyen
+# Username: nguyent2
+#
+# Purpose: This program is designed to demonstrate the Life Path Number
+# Learn the impact a bug can have in the real world.
+# Explore life path numbers.
+# Practice creating your own fruitful functions.
+# Learn to use modulus to capture remainders.
+#
+######################################################################
+# Acknowledgements:
+# Berea College
+#
+##########################################################################
+
+#If the user inputs a negative integer, the program will take the absolute value of that integer.
+
+def check_integer(thy):
+    """
+    This function checks if the user's input is an integer or not.
+    If not: return False
+    If it is: return True
+    :param thy: thy is the user's input
+    :return: True if thy is an integer
+    False if thy is not an integer
+    """
+    try:
+        integer = abs(int(thy))
+        return True
+    #When it is not an integer, it will have a value error in converting to an integer.
+    #It will then return false in those cases.
+    except ValueError:
+        return False
+
+def life_path_number(thy):
+    """
+    This function test to see if a number is a master number or not.
+    If it is a master number, the function returns True, otherwise, False.
+    :param thy: thy is the input of the user
+    :return: True if a master number, False if not a master number
+    """
+    if thy%11 == 0 and abs(thy)<=33:
+        #Check to see if thy is a master number or not
+        return True
+    else:
+        return False
+
+def what_the_function_return(thy):
+    """
+    If the previous function is a master number, this function returns that number is a master number.
+    If not, this function turn the number into digits and sum the digits.
+    :param thy:
+    :return: If a master number, return master number
+    if not a master number , return the sum of the digits
+    """
+    if life_path_number(thy) == True:
+        return abs(thy), "is a master number"
+    # Return a master number if it is a master number
+    else:
+        #This is the function in a04_peel_digits.py of Dr. Mario Nakazawa, Dr. Jan Pearce, Dr. Heggen, and Dr. Lovell.
+        str_num = str(abs(thy))  # Converts to string to utilize Python's strong string features
+        digit_list = []  # Creates empty list
+        for letter in str_num:
+            digit_list.append(int(letter))  # Puts each digits into list
+       #End of the function in a04_peel_digits.py
+
+        #Use try and except IndexValue to get the digit of the number
+        #Since the user is entering a date, month, year of their birthday, which is at most 4 digits
+        # so just try to get 4 digits. (In general, should try i digits)
+        try:
+            a = digit_list[0]
+            b = digit_list[1]
+            c = digit_list[2]
+            d = digit_list[3]
+            sum = a+b+c+d
+        except IndexError:
+            #if the number has fewer than 4 digits, try to take 3 digits.
+            try:
+                a = digit_list[0]
+                b = digit_list[1]
+                c = digit_list[2]
+                sum = a + b + c
+            except IndexError:
+                #if the number has fewer than 3 digits, try to take 2 digits.
+                try:
+                    a = digit_list[0]
+                    b = digit_list[1]
+                    sum = a+b
+                except IndexError:
+                    #if the number has fewer than 2 digits, which means the number has only 1 digit.
+                    # So take that digit as the sum.
+                    sum = a
+        return("Sum of the digits is", sum)
+        #return the sum of the digits
+
+def check(create_a_list):
+    """
+    This function makes sure that user can only enter a number having fewer or equals to 4 digits
+    :param create_a_list: this is a list of the user's input (the birthday, birthmonth, and birthyear)
+    :return: True if and only if it passes all of the conditions:
+    The user has to input an integer having fewer or equals to 4 digits
+    """
+    for i in range(len(create_a_list)):
+        #for each element in a list (loop 3 times)
+        if check_integer(create_a_list[i]) == True:
+            # if that element is an integer
+            if len(create_a_list[i]) <= 4:
+                #checks if that integer has fewer or equals to 4 digits
+                print(create_a_list[i], " is valid for the next step!")
+                # if yes, print that element, with a string "valid for next step"
+            else:
+                #if not
+                while len(create_a_list[i]) > 4:
+                    # if the number of the digits are always greater than 4,
+                    # require the user to continuously put in a new value
+                    create_a_list[i] = input("Please enter a valid value for the question number " + str(i + 1) + " ")
+        while check_integer(create_a_list[i]) == False:
+            # if the input is not an integer, require user continuously put in a new value until it pass the requirement
+                create_a_list[i] = input("Please enter a valid value for the question number " + str(i + 1) + " ")
+                if check_integer(create_a_list[i]) == True:
+                    # if it pass the requirement, check to see an integer has 4 or fewer digits or not
+                    # if not, continuously require user to enter new number
+                    while len(create_a_list[i]) > 4:
+                        create_a_list[i] = input("Please enter a valid value for the question number " + str(i + 1) + " ")
+                    print(create_a_list[i], " is valid for the next step!")
+                    #notify that the input meets the requirement.
+    return True
+#the function above passes if and only if all of the requirements are met.
+
+def what_the_function_truly_returns(create_a_list):
+    """
+    This is the final answer about whether or not the number is a master number, or it will calculate the sum of the digits
+    :param create_a_list: this is a list of the user's input (the birthday, birthmonth, and birthyear)
+    :return: the number is a master number, or the sum of the digits
+    """
+    if check(create_a_list) == True:
+        for i in range(len(create_a_list)):
+            print(what_the_function_return(int(create_a_list[i])))
+            # when all of the above requirements are met, this function will consider if the input is a master number or not
+
+def main():
+    """
+    This is the main function, which calls all functions
+    :return: the sum of the digits if the input is not a master number
+    return the number itself it the input is a master number
+    """
+    ask_birthday = input("Can you please enter your day of birth?" + " ") #ask user's birth day
+    ask_birthmonth = input("Can you please enter your month of birth?"+" ") #ask user's birth month
+    ask_birthyear = input("Can you please enter your year of birth?" + " ") # ask user's birth year
+    create_a_list = [ask_birthday, ask_birthmonth, ask_birthyear] #create a list of the user's answer in order to analyze the input
+    what_the_function_truly_returns(create_a_list) #call the function to print if it is a master number, or a sum of digits
+
+
+if __name__ == "__main__":
+    #Call the main() function
+    main()
